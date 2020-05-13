@@ -54,15 +54,6 @@
 #include "wiced_hal_gpio.h"
 #include "wiced_bt_trace.h"
 
-extern void platform_led_init( void );
-
-typedef struct
-{
-    wiced_bt_gpio_numbers_t led_gpio;
-    uint32_t led_config;
-    uint32_t led_default_state;
-}wiced_led_config_t;
-
 typedef enum
 {
     // WICED_PLATFORM_LED_1,
@@ -72,7 +63,7 @@ typedef enum
 #define HCI_UART_DEFAULT_BAUD   3000000   /* default baud rate is 3M, that is max supported baud rate on Mac OS */
 
 void debug_uart_enable(uint32_t baud_rate);
-void platform_init_43012c0(void);
+void wiced_platform_init(void);
 
 extern wiced_debug_uart_types_t wiced_debug_uart;
 /* @} */
