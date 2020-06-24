@@ -31,62 +31,33 @@
  * so agrees to indemnify Cypress against all liability.
  */
 
-/** @file
-*
-* Defines peripherals available for use on CYW920706WCDEVAL, and legacy BCM920706_P49 and BCM920706_B49 boards.
-* Use LEGACY_BOARD=1 in the make target for the BCM920706_P49 and BCM920706_B49 boards
-* Use B49=1 in the make target for BCM920706_B49 board.
-*
-*/
-
 #pragma once
-
-/** \addtogroup Platfrom config - Peripherals pin configuration
-*   \ingroup HardwareDrivers
-*/
 /*! @{ */
+/*******************************************************************************
+*  Include
+*******************************************************************************/
 
-/******************************************************
- *                   Enumerations
- ******************************************************/
+/*******************************************************************************
+*  Public Macro and Literal Definition
+*******************************************************************************/
 
-#include "wiced_bt_types.h"
-#include "wiced_hal_gpio.h"
-#include "wiced_bt_trace.h"
+/*******************************************************************************
+*  Public Typedef and Enum
+*******************************************************************************/
 
-typedef enum
-{
-    // WICED_PLATFORM_LED_1,
-    WICED_PLATFORM_LED_MAX
-}wiced_platform_led_t;
+/*******************************************************************************
+*  Public Structure
+*******************************************************************************/
 
-#define HCI_UART_DEFAULT_BAUD   3000000   /* default baud rate is 3M, that is max supported baud rate on Mac OS */
+/*******************************************************************************
+*  Extern Variable
+*******************************************************************************/
 
-/**
- * wiced_platform_transport_rx_data_handler
- *
- * Callback registered by the application to receive the incoming HCI UART data.
- *
- * @param[in] op_code   : operation code for the incoming HCI data (refer to hci_control_api.h)
- * @param[in] p_data    : Pointer to the received data for the op_code
- * @param[in] data_len  : length of the data pointed to by p_data in bytes
- */
-typedef void (wiced_platform_transport_rx_data_handler)(uint16_t op_code, uint8_t *p_data, uint32_t data_len);
+/*******************************************************************************
+*  Public Function Declaration
+*******************************************************************************/
+wiced_bool_t platform_mem_init(void);
+void *platform_mem_allocate(uint32_t size);
+void platform_mem_free(void *p_target);
 
-void debug_uart_enable(uint32_t baud_rate);
-void wiced_platform_init(void);
-
-/**
- * wiced_platform_transport_init
- *
- * Initialize the WICED HCI Transport interface.
- *
- * @param[in] p_rx_data_handler : user callback for incoming HCI data.
- *
- * @return  WICED_TRUE - success
- *          WICED_FALSE - fail
- */
-wiced_bool_t wiced_platform_transport_init(wiced_platform_transport_rx_data_handler *p_rx_data_handler);
-
-extern wiced_debug_uart_types_t wiced_debug_uart;
 /* @} */
