@@ -77,6 +77,20 @@ void debug_uart_enable(uint32_t baud_rate);
 void wiced_platform_init(void);
 
 /**
+ * wiced_platform_i2c_init
+ *
+ * Initialize the I2C interface.
+ */
+void wiced_platform_i2c_init(void);
+
+/**
+ * wiced_platform_i2s_init
+ *
+ * Initialize the I2S interface.
+ */
+void wiced_platform_i2s_init(void);
+
+/**
  * wiced_platform_transport_init
  *
  * Initialize the WICED HCI Transport interface.

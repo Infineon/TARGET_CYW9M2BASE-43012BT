@@ -89,8 +89,8 @@ endif
 #
 # Patch variables
 #
-CY_CORE_PATCH=$(CY_INTERNAL_BASELIB_PATH)/internal/43012C0/patches/SLNA/patch.elf
-CY_CORE_CGSLIST=$(CY_INTERNAL_BASELIB_PATH)/internal/43012C0/patches/SLNA/patch.cgs
+CY_CORE_PATCH=$(CY_INTERNAL_BASELIB_PATH)/internal/43012C0/patches/wlbga_sLNA/patch.elf
+CY_CORE_CGSLIST=$(CY_INTERNAL_BASELIB_PATH)/internal/43012C0/patches/wlbga_sLNA/patch.cgs
 CY_CORE_PATCH_CFLAGS=$(CY_INTERNAL_BASELIB_PATH)/internal/43012C0/gcc/43012C0.cflag
 CY_CORE_PATCH_LIB_PATH=libraries/prebuilt
 

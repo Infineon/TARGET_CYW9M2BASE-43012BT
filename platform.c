@@ -328,13 +328,29 @@ void wiced_platform_init(void)
 {
     wiced_platform_warm_up();
 
-    i2s_init_m2base43012();
+    platform_mem_init();
+}
 
+/**
+ * wiced_platform_i2c_init
+ *
+ * Initialize the I2C interface.
+ */
+void wiced_platform_i2c_init(void)
+{
     wiced_hal_i2c_init();
     i2c_init_m2base43012();
     wiced_hal_i2c_set_speed(I2CM_SPEED_400KHZ);
+}
 
-    platform_mem_init();
+/**
+ * wiced_platform_i2s_init
+ *
+ * Initialize the I2S interface.
+ */
+void wiced_platform_i2s_init(void)
+{
+    i2s_init_m2base43012();
 }
 
 /*
@@ -561,6 +577,8 @@ uint16_t wiced_platform_nvram_write(uint16_t vs_id, uint16_t data_length, uint8_
     {
         if (p_index->content.vs_id == vs_id)
         {
+            wiced_result_t result;
+
             /* Check the data length. */
             if (data_length != p_index->data_length)
             {
@@ -580,17 +598,21 @@ uint16_t wiced_platform_nvram_write(uint16_t vs_id, uint16_t data_length, uint8_
                 return data_length;
             }
 
-            /* Inform Host device. */
-            if (wiced_transport_send_data(HCI_CONTROL_HCI_AUDIO_EVENT_WRITE_NVRAM_DATA,
-                                          (uint8_t *) &p_index->content,
-                                          sizeof(p_index->content.vs_id) + p_index->data_length) != WICED_SUCCESS)
-            {
-                *p_status = WICED_NO_MEMORY;
-                return 0;
-            }
-
             /* Update data content. */
             memcpy((void *) &p_index->content.data[0], (void *) p_data, data_length);
+
+            /* Inform Host device. */
+            result = wiced_transport_send_data(HCI_CONTROL_HCI_AUDIO_EVENT_WRITE_NVRAM_DATA,
+                                          (uint8_t *) &p_index->content,
+                                          sizeof(p_index->content.vs_id) + p_index->data_length);
+            if (result != WICED_SUCCESS)
+            {
+                /* fail, delete entry due to unsync */
+                wiced_platform_nvram_delete(vs_id, p_status);
+
+                *p_status = result;
+                return 0;
+            }
 
             *p_status = WICED_SUCCESS;
             return p_index->data_length;
