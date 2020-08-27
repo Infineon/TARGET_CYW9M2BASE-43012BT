@@ -46,11 +46,6 @@ CHIP_REV=C0
 BLD=A
 
 #
-# floating point and other device specific compiler flags
-#
-CY_CORE_CFLAGS+=
-
-#
 # Define the features for this target
 #
 
