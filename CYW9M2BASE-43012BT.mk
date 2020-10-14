@@ -35,8 +35,6 @@ ifeq ($(WHICHFILE),true)
 $(info Processing $(lastword $(MAKEFILE_LIST)))
 endif
 
-CY_BSP_PATH?=$(CY_SHARED_PATH)/dev-kit/bsp/TARGET_$(TARGET)
-
 #
 # Device definition
 #
@@ -44,6 +42,26 @@ DEVICE=CYW43012TC0EKUBGEST
 CHIP=43012
 CHIP_REV=C0
 BLD=A
+
+FLOW_VERSION=$(if $(strip $(CY_GETLIBS_SHARED_PATH)),2,1)
+ifeq ($(FLOW_VERSION),2)
+# Chip specific libs
+COMPONENTS+=$(COMPONENTS_$(CHIP)$(CHIP_REV))
+CY_APP_PATCH_LIBS+=$(CY_$(CHIP)$(CHIP_REV)_APP_PATCH_LIBS)
+# baselib and BSP path variables
+CY_TARGET_DEVICE?=$(CHIP)$(CHIP_REV)
+ifeq ($(SEARCH_$(CY_TARGET_DEVICE)),)
+# internal only - app deploys will always initialize this in mtb.mk
+SEARCH_$(CY_TARGET_DEVICE)?=$(IN_REPO_BTSDK_ROOT)/wiced_btsdk/dev-kit/baselib/$(CY_TARGET_DEVICE)
+SEARCH+=$(SEARCH_$(CY_TARGET_DEVICE))
+endif
+CY_BSP_PATH?=$(SEARCH_TARGET_$(TARGET))
+CY_BASELIB_PATH?=$(SEARCH_$(CHIP)$(CHIP_REV))
+CY_BASELIB_CORE_PATH?=$(SEARCH_core-make)
+CY_INTERNAL_BASELIB_PATH?=$(patsubst %/,%,$(CY_BASELIB_PATH))
+else
+CY_BSP_PATH?=$(CY_SHARED_PATH)/dev-kit/bsp/TARGET_$(TARGET)
+endif
 
 #
 # Define the features for this target

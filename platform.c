@@ -48,6 +48,8 @@
   #define cr_pad_config_adr4                             0x00320078
   #define cr_pad_config_adr5                             0x0032007c
   #define cr_pad_config_adr6                             0x00320080
+  #define cr_pad_config_adr7                             0x003200e4
+  #define cr_pad_config_adr8                             0x00320110
   #define cr_pad_fcn_ctl_adr0                            0x00320088
   #define cr_pad_fcn_ctl_adr1                            0x0032008c
   #define cr_pad_fcn_ctl_adr2                            0x00320090
@@ -104,6 +106,23 @@ void debug_uart_enable(uint32_t baud_rate)
 
 void i2s_init_m2base43012(void)
 {
+#ifdef BT_I2S_ENABLE // BT_I2S
+    // Mux to PCM_IN to I2S_DI and PCM_OUT to I2S_DO
+    REG32(cr_pad_fcn_ctl_adr2 ) &= 0xF0F0FFFF;
+    REG32(cr_pad_fcn_ctl_adr2 ) |= 0x01010000;  // PCM_IN, PCM_OUT
+
+    // Mux PCM_CLK to I2S_CLK pin and PCM_SYNC to I2S_WS pin
+    REG32(cr_pad_fcn_ctl_adr3 ) &= 0xFFFF00FF;
+    REG32(cr_pad_fcn_ctl_adr3 ) |= 0x00001100;  // PCM_CLK, PCM_SYNC
+
+    // Set I2S_DO as an output and I2S_DI as an input
+    REG32(cr_pad_config_adr7 ) &= 0xFF00FF00;
+    REG32(cr_pad_config_adr7 ) |= 0x00090088;
+
+    // Set I2S_WS and I2S_CLK as outputs
+    REG32(cr_pad_config_adr8 ) &= 0x8080FFFF;
+    REG32(cr_pad_config_adr8 ) |= 0x88880000;
+#else // BT_PCM
     /* 1. Set BT_PCM_IN as I2S_DI. */
     /*
      * 1.1. Set Control Pad: cr_pad_config_adr4 [7:0]
@@ -138,7 +157,7 @@ void i2s_init_m2base43012(void)
      *      D[6]:ind, 0: input not disabled (input enabled), 1: input disabled
      *      D[7,5:4]:src, slew rate control
      */
-    REG32(cr_pad_config_adr4) = (REG32(cr_pad_config_adr4) & 0xffff00ff) | (0x68 << 8);
+    REG32(cr_pad_config_adr4) = (REG32(cr_pad_config_adr4) & 0xffff00ff) | (0x88 << 8);
     /*
      * 2.2. Assign Function: cr_pad_fcn_ctl_adr1 [19:16]
      *      0: A_GPIO[2]
@@ -162,7 +181,7 @@ void i2s_init_m2base43012(void)
      *      D[6]:ind, 0: input not disabled (input enabled), 1: input disabled
      *      D[7,5:4]:src, slew rate control
      */
-    REG32(cr_pad_config_adr4) = (REG32(cr_pad_config_adr4) & 0x00ffffff) | (0x68 << 24);
+    REG32(cr_pad_config_adr4) = (REG32(cr_pad_config_adr4) & 0x00ffffff) | (0x88 << 24);
     /*
      * 3.2. Assign Function: cr_pad_fcn_ctl_adr1 [23:20]
      *      0: A_GPIO[1]
@@ -186,7 +205,7 @@ void i2s_init_m2base43012(void)
      *      D[6]:ind, 0: input not disabled (input enabled), 1: input disabled
      *      D[7,5:4]:src, slew rate control
      */
-    REG32(cr_pad_config_adr4) = (REG32(cr_pad_config_adr4) & 0xff00ffff) | (0x68 << 16);
+    REG32(cr_pad_config_adr4) = (REG32(cr_pad_config_adr4) & 0xff00ffff) | (0x88 << 16);
     /*
      * 4.2. Assign Function: cr_pad_fcn_ctl_adr1 [27:24]
      *      0: A_GPIO[0]
@@ -199,6 +218,7 @@ void i2s_init_m2base43012(void)
      *      7: I2S_SSCK
      */
     REG32(cr_pad_fcn_ctl_adr1) = (REG32(cr_pad_fcn_ctl_adr1) & 0xf0ffffff) | (0x5 << 24);
+#endif
 }
 
 void i2c_init_m2base43012(void)
