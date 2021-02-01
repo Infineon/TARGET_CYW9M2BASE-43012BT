@@ -1,4 +1,4 @@
-DevicePreset "43012C0_Generic_UART_37_4MHz_fcbga_ref3_dLNA"
+DevicePreset "43012C0_Generic_UART_37_4MHz_wlbga_ref3_sLNA"
 {
 	ConfigFSOffset = 0
 	DLReadWriteMode = "Cortex M3 HCI"
@@ -14,11 +14,11 @@ DevicePreset "43012C0_Generic_UART_37_4MHz_fcbga_ref3_dLNA"
 	DLConfigReprogramIF_PLL = 0
 	DLUsbBulkPipe = 0
 	DLMinidriver = 0
-	DLMinidriverPathUSB = "[MINIDRIVERS]\20739\usb.hex"
-	DLMinidriverPathNET = "[MINIDRIVERS]\20739\uart.hex"
-	DLMinidriverPathSDIO = "[MINIDRIVERS]\2079\sdio.hex"
-	DLMinidriverPathUPRX = "[MINIDRIVERS]\20739\uart.hex"
-	DLMinidriverPathUART = "[MINIDRIVERS]\20739\uart.hex"
+	DLMinidriverPathUSB = "[MINIDRIVERS]\4335A0\usb.hex"
+	DLMinidriverPathNET = "[MINIDRIVERS]\2045\INVALID.hex"
+	DLMinidriverPathSDIO = "[MINIDRIVERS]\2045\INVALID.hex"
+	DLMinidriverPathUPRX = "[MINIDRIVERS]\2045\uart_legacy_ramcfg_only.hex"
+	DLMinidriverPathUART = "[MINIDRIVERS]\4349B0\uart.hex"
 	DLFirmware = 0
 	DLFirmwareTargeting = "Standard"
 	DLConfig = 1

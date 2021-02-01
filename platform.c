@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -286,7 +286,75 @@ void i2c_init_m2base43012(void)
      *      15: SDA
      */
     REG32(cr_pad_fcn_ctl_adr0) = (REG32(cr_pad_fcn_ctl_adr0) & 0xfff0ffff) | (0xf << 16);
+}
 
+void i2c_init_bitbang(void)
+{
+    /* 1. Set BT_GPIO5 as I2C_SCL. */
+    /*
+     * 1.1. Set Control Pad: cr_pad_config_adr1 [15:8]
+     *      D[0]:oeb, 0: output enabled, 1: output disabled
+     *      D[1]:pub, 0: pull high disabled, 1: pull high enabled
+     *      D[2]:pdn, 0: pull down disabled, 1: pull down enabled
+     *      D[3]:selhys, 0:hysteresis disabled, 1: hysteresis enabled
+     *      D[6]:ind, 0: input not disabled (input enabled), 1: input disabled
+     *      D[7,5:4]:src, slew rate control
+     */
+    REG32(cr_pad_config_adr1) = (REG32(cr_pad_config_adr1) & 0xffff00ff) | (0x02 << 8);
+ //   REG32(cr_pad_config_adr1) = REG32(cr_pad_config_adr1) & 0xffff00ff;
+    /*
+     * 1.2. Assign Function: cr_pad_fcn_ctl_adr0 [23:20]
+     *      0: GPIO[5]
+     *      1: HCLK
+     *      2: -
+     *      3: I2S_MSCK
+     *      4: I2S_SSCK
+     *      5: PHY_DEBUG_5
+     *      6: wlan_clk_req
+     *      7: CLK_REQ
+     *      8: Super_Mux
+     *      9: -
+     *      10: -
+     *      11: UART2_CTS_N
+     *      12: BT_RX_ACTIVE
+     *      13: -
+     *      14: mia_debug[2]
+     *      15: SCL
+     */
+    REG32(cr_pad_fcn_ctl_adr0) = REG32(cr_pad_fcn_ctl_adr0) & 0xff0fffff;
+
+    /* 2. Set BT_GPIO4 as I2C_SDA. */
+    /*
+     * 2.1. Set Control Pad: cr_pad_config_adr1 [7:0]
+     *      D[0]:oeb, 0: output enabled, 1: output disabled
+     *      D[1]:pub, 0: pull high disabled, 1: pull high enabled
+     *      D[2]:pdn, 0: pull down disabled, 1: pull down enabled
+     *      D[3]:selhys, 0:hysteresis disabled, 1: hysteresis enabled
+     *      D[6]:ind, 0: input not disabled (input enabled), 1: input disabled
+     *      D[7,5:4]:src, slew rate control
+     */
+    REG32(cr_pad_config_adr1) = (REG32(cr_pad_config_adr1) & 0xffffff00) | 0x02;
+ //   REG32(cr_pad_config_adr1) = REG32(cr_pad_config_adr1) & 0xffffff00;
+    /*
+     * 2.2. Assign Function: ccr_pad_fcn_ctl_adr0 [19:16]
+     *      0: GPIO[4]
+     *      1: LINK_IND
+     *      2: DEBUG_RXD
+     *      3: I2S_MSDO
+     *      4: I2S_SSDO
+     *      5: PHY_DEBUG_4
+     *      6: wlan_clk_req
+     *      7: -
+     *      8: Super_Mux
+     *      9: CLASS1[1]
+     *      10: -
+     *      11: UART2_RTS_N
+     *      12: coex_out[1]
+     *      13: -
+     *      14: mia_debug[1]
+     *      15: SDA
+     */
+    REG32(cr_pad_fcn_ctl_adr0) = REG32(cr_pad_fcn_ctl_adr0) & 0xfff0ffff;
 }
 
 #if 0
