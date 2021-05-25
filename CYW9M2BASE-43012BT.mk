@@ -53,14 +53,18 @@ SEARCH_$(CY_TARGET_DEVICE)?=$(IN_REPO_BTSDK_ROOT)/wiced_btsdk/dev-kit/baselib/$(
 SEARCH+=$(SEARCH_$(CY_TARGET_DEVICE))
 endif
 CY_BSP_PATH?=$(SEARCH_TARGET_$(TARGET))
+# ensure the baselib has been instantiated (in case make getlibs had already been performed, but for a BSP with a different CSP
+ifneq ("$(wildcard $(SEARCH_$(CY_TARGET_DEVICE))/COMPONENT_$(CY_TARGET_DEVICE))","")
 CY_BASELIB_PATH?=$(SEARCH_$(CY_TARGET_DEVICE))/COMPONENT_$(CY_TARGET_DEVICE)
 CY_BASELIB_CORE_PATH?=$(SEARCH_core-make)
 CY_INTERNAL_BASELIB_PATH?=$(patsubst %/,%,$(CY_BASELIB_PATH))
 override CY_DEVICESUPPORT_SEARCH_PATH:=$(call CY_MACRO_SEARCH,devicesupport.xml,$(CY_INTERNAL_BASELIB_PATH))
+endif
 
 #
 # Define the features for this target
 #
+KITPROG3_BRIDGE=1
 
 # No FLASH on this board
 # Begin address of flash0, off-chip sflash
@@ -72,7 +76,7 @@ override CY_DEVICESUPPORT_SEARCH_PATH:=$(call CY_MACRO_SEARCH,devicesupport.xml,
 CY_CORE_APP_ENTRY:=spar_crt_setup
 
 # this is a platform value, need to determine underlying logic to calculate a safe value
-PLATFORM_DIRECT_LOAD_BASE_ADDR = 0x230000
+PLATFORM_DIRECT_LOAD_BASE_ADDR = 0x238000
 #
 # TARGET UART parameters
 #

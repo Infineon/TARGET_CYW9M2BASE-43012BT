@@ -41,6 +41,10 @@
 #include "platform_mem.h"
 #include "wiced_hal_nvram.h"
 
+#ifndef PLATFORM_REMOTE_HOST_NVRAM_SUPPORT
+#define PLATFORM_REMOTE_HOST_NVRAM_SUPPORT  0
+#endif
+
   #define cr_pad_config_adr0                             0x00320068
   #define cr_pad_config_adr1                             0x0032006c
   #define cr_pad_config_adr2                             0x00320070
@@ -642,6 +646,7 @@ uint16_t wiced_platform_nvram_read(uint16_t vs_id, uint16_t data_length, uint8_t
  */
 uint16_t wiced_platform_nvram_write(uint16_t vs_id, uint16_t data_length, uint8_t *p_data, wiced_result_t *p_status)
 {
+#if (PLATFORM_REMOTE_HOST_NVRAM_SUPPORT)
     platform_virtual_nvram_t *p_index = NULL;
     wiced_bool_t update = WICED_FALSE;
 
@@ -738,6 +743,10 @@ uint16_t wiced_platform_nvram_write(uint16_t vs_id, uint16_t data_length, uint8_
 
     *p_status = WICED_SUCCESS;
     return p_index->data_length;
+#else
+    *p_status = WICED_ERROR;
+    return 0;
+#endif
 }
 
 /**
