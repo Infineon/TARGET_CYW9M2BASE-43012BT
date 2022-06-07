@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -800,4 +800,15 @@ void wiced_platform_nvram_delete(uint16_t vs_id, wiced_result_t *p_status)
         p_pre = p_index;
         p_index = p_index->p_next;
     }
+}
+
+/*
+ *  wiced_bt_dev_lrac_disable_secure_connection
+ *
+ *  Disable BT secure connection
+ *
+ */
+void wiced_bt_dev_lrac_disable_secure_connection(void)
+{
+    //NOTE: For 43012C0, it's only supported in CYW943012BTEVK-01
 }
