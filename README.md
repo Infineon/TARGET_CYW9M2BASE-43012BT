@@ -6,7 +6,7 @@ The Infineon CYW9M2BASE-43012BT is a prototyping kit that enables the design and
 
 ### Kit Features
 
-* 106 ball WLBGA package dual-mode (LE/BR/EDR) Bluetooth&#174; 5.2-compliant wireless MCU
+* 106 ball WLBGA package dual-mode (LE/BR/EDR) Bluetooth&#174; 5.4-compliant wireless MCU
 * J5 Expansion header for direct access to BT_GPIO, i2S, and UART
 * Audio Arduino shield with on-board microphones, audio codec chip, and headphone output
 * USB connector for power, programming, and USB-UART bridge
